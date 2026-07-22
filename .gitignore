@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+*.db
+*.sqlite3
+
+# Node & Frontend
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+
+# Environment & IDE
+.env
+.DS_Store
+.vscode/
+.idea/
+
+# ML Artifacts Cache (Keep model files, ignore temporary datasets if needed)
+# dataset/loan_data.csv

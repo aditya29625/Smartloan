@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: smartloan_postgres
+    environment:
+      POSTGRES_USER: smartloan
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: smartloan_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smartloan -d smartloan_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: smartloan_backend
+    environment:
+      - DATABASE_URL=postgresql://smartloan:password@postgres:5432/smartloan_db
+      - SECRET_KEY=production-super-secret-key-change-me-32-chars
+      - ENVIRONMENT=production
+      - DEBUG=False
+      - FRONTEND_URL=http://localhost
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: smartloan_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

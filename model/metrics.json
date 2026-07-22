@@ -1,0 +1,30 @@
+{
+  "Logistic Regression": {
+    "Accuracy": 0.8417,
+    "Precision": 0.868,
+    "Recall": 0.9495,
+    "F1": 0.9069,
+    "ROC-AUC": 0.8383
+  },
+  "Random Forest": {
+    "Accuracy": 0.8365,
+    "Precision": 0.8591,
+    "Recall": 0.9553,
+    "F1": 0.9046,
+    "ROC-AUC": 0.8334
+  },
+  "Gradient Boosting": {
+    "Accuracy": 0.827,
+    "Precision": 0.8684,
+    "Recall": 0.9275,
+    "F1": 0.897,
+    "ROC-AUC": 0.8219
+  },
+  "Decision Tree": {
+    "Accuracy": 0.8134,
+    "Precision": 0.8667,
+    "Recall": 0.91,
+    "F1": 0.8878,
+    "ROC-AUC": 0.7623
+  }
+}
