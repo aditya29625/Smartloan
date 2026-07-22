@@ -1,11 +1,9 @@
 import axios from 'axios'
 
-// In production (Vercel), VITE_API_URL points to the live Render backend.
-// In local dev it falls back to localhost:8000.
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-
+// Empty baseURL = relative paths — Vercel routes /auth /predictions /dashboard etc
+// to the Python serverless function. Works both locally (via proxy) and on Vercel.
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: import.meta.env.VITE_API_URL || '',
   headers: { 'Content-Type': 'application/json' },
   timeout: 30000,
 })
