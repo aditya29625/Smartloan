@@ -24,3 +24,4 @@ npm-debug.log*
 
 # ML Artifacts Cache (Keep model files, ignore temporary datasets if needed)
 # dataset/loan_data.csv
+.vercel

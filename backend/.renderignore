@@ -1,0 +1,8 @@
+dataset/
+venv/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite3
+__pycache__/
+*.pyc

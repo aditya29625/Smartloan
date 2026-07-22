@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: smartloan-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && pip install -r ../model/requirements-ml.txt && cd .. && python dataset/generate_dataset.py && python model/train.py
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        value: smartloan-production-secret-key-2025-xyz
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "False"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: smartloan-db
+          property: connectionString
+
+databases:
+  - name: smartloan-db
+    databaseName: smartloan
+    user: smartloan
