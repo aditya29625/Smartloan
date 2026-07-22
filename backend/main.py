@@ -28,7 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from fastapi.staticfiles import StaticFiles
+import os
 from pathlib import Path
 
 # ── Routers ───────────────────────────────────────────────────────────────────
@@ -38,20 +38,8 @@ app.include_router(dashboard.router)
 app.include_router(profile.router)
 app.include_router(admin.router)
 
-# ── Mount Production Frontend Assets ──────────────────────────────────────────
-FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
-if FRONTEND_DIST.exists():
-    app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="frontend")
 
-
-# ── Lifecycle ─────────────────────────────────────────────────────────────────
-@app.on_event("startup")
-def on_startup():
-    """Create DB tables on startup."""
-    create_tables()
-    print(f"✅  SmartLoan AI API started — {settings.environment}")
-
-
+# ── Health & Root ─────────────────────────────────────────────────────────────
 @app.get("/", tags=["Health"])
 def root():
     return {
@@ -64,4 +52,20 @@ def root():
 
 @app.get("/health", tags=["Health"])
 def health():
-    return {"status": "healthy"}
+    return {"status": "healthy", "environment": settings.environment}
+
+
+# ── Lifecycle ─────────────────────────────────────────────────────────────────
+@app.on_event("startup")
+def on_startup():
+    """Create DB tables on startup."""
+    create_tables()
+    print(f"✅  SmartLoan AI API started — {settings.environment}")
+
+
+# ── Mount Frontend (local dev only — Vercel handles static files separately) ──
+if not os.environ.get("VERCEL"):
+    from fastapi.staticfiles import StaticFiles
+    FRONTEND_DIST = Path(__file__).parent.parent / "frontend" / "dist"
+    if FRONTEND_DIST.exists():
+        app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="frontend")
